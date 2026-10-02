@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>معهد السرور التعليمي - المرحلة الابتدائية</title>
   
-  <!-- مكتبة Supabase الرسمية عبر CDN -->
+  <!-- مكتبة Supabase الرسمية -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <!-- Tailwind CSS Framework -->
@@ -43,7 +43,7 @@
 
   <style>
     * {
-      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      font-family: 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
     
@@ -67,14 +67,14 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* تنسيقات الطباعة الرسمية وتصدير PDF */
+    /* تنسيقات الطباعة الرسمية */
     @media print {
       body {
         background: #ffffff !important;
         color: #000000 !important;
         padding-bottom: 0 !important;
       }
-      header, footer, #teacherControlHeader, #loginModal, .no-print, button, .action-buttons {
+      header, footer, #teacherControlHeader, #teacherLoginModal, .no-print, button, .action-buttons {
         display: none !important;
       }
       #printReportArea {
@@ -101,7 +101,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col justify-between antialiased selection:bg-institute-800 selection:text-white pb-20">
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col justify-between antialiased selection:bg-institute-800 selection:text-white">
 
   <!-- =============================== -->
   <!--       الهيدر الرئيسي للمنصة     -->
@@ -153,7 +153,6 @@
 
       <!-- عرض المحاضرات المرئية -->
       <div id="studentLecturesContainer" class="space-y-4">
-        <!-- شريط الفلاتر والبحث -->
         <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm space-y-3">
           <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
             <span class="text-xs font-black text-slate-500 whitespace-nowrap pl-1">المرحلة:</span>
@@ -175,9 +174,7 @@
         </div>
 
         <!-- شبكة بطاقات الفيديو للطلاب -->
-        <div id="studentLecturesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          <!-- تملأ برمجياً -->
-        </div>
+        <div id="studentLecturesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
       </div>
 
       <!-- عرض مكتبة الـ PDF -->
@@ -202,9 +199,7 @@
           </div>
         </div>
 
-        <div id="studentPdfsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          <!-- تملأ برمجياً -->
-        </div>
+        <div id="studentPdfsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
       </div>
 
     </section>
@@ -240,11 +235,13 @@
         </div>
 
         <div class="flex items-center gap-2 justify-between lg:justify-end">
-          <!-- علامة مؤشر حالة الربط مع Supabase -->
           <div id="supabaseStatusBadge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors bg-amber-50 text-amber-800 border-amber-200">
             <span id="supabaseStatusDot" class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
             <span id="supabaseStatusText">فحص الربط السحابي...</span>
           </div>
+          <button onclick="syncWithSupabase(true)" class="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all border border-slate-200 flex items-center gap-1">
+            <span>🔄 تحديث</span>
+          </button>
         </div>
       </div>
 
@@ -260,7 +257,6 @@
               <p class="text-xs text-slate-500 mt-0.5">تفقد الحضور بنقرة واحدة مع إمكانية إشعار ولي الأمر فورياً عبر واتساب</p>
             </div>
 
-            <!-- أداة التاريخ اليومي -->
             <div class="flex items-center gap-2.5 bg-slate-50 p-2 rounded-2xl border border-slate-200">
               <label class="text-xs font-bold text-slate-700 whitespace-nowrap flex items-center gap-1">
                 <svg class="w-4 h-4 text-institute-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -270,7 +266,6 @@
             </div>
           </div>
 
-          <!-- شريط اختيار الصفوف الابتدائية -->
           <div class="flex items-center justify-between gap-2 flex-wrap">
             <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 w-full md:w-auto">
               <span class="text-xs font-bold text-slate-500 whitespace-nowrap pl-1">الصف الابتدائي:</span>
@@ -288,7 +283,6 @@
             </button>
           </div>
 
-          <!-- العدادات والإحصائيات الحية -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-center">
             <div class="bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
               <span class="text-[11px] text-slate-500 font-bold block">إجمالي طلاب الصف</span>
@@ -309,10 +303,7 @@
           </div>
         </div>
 
-        <!-- قائمة بطاقات الحضور اليومي -->
-        <div id="dailyAttendanceListContainer" class="space-y-2.5">
-          <!-- ديناميكي -->
-        </div>
+        <div id="dailyAttendanceListContainer" class="space-y-2.5"></div>
       </div>
 
       <!-- 2. تبويب: التقارير والطباعة -->
@@ -374,7 +365,6 @@
           </div>
         </div>
 
-        <!-- ورقة التقرير الرسمية للطباعة -->
         <div id="printReportArea" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div class="border-b-2 border-slate-800 pb-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -392,9 +382,7 @@
             </div>
           </div>
 
-          <div id="reportSummaryStats" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center py-2">
-            <!-- ديناميكي -->
-          </div>
+          <div id="reportSummaryStats" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center py-2"></div>
 
           <div class="overflow-x-auto">
             <table class="w-full text-right text-xs border border-slate-300" id="reportResultTable">
@@ -453,8 +441,8 @@
               <input type="tel" id="newStudentPhone" required placeholder="0770XXXXXXX" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-institute-800" dir="ltr">
             </div>
             <div class="flex items-end">
-              <button type="submit" class="w-full bg-institute-900 hover:bg-institute-950 text-white py-2 rounded-xl text-xs font-black shadow-md transition-all">
-                + حفظ التلميذ وإضافته
+              <button type="submit" id="btnSaveStudent" class="w-full bg-institute-900 hover:bg-institute-950 text-white py-2 rounded-xl text-xs font-black shadow-md transition-all">
+                + حفظ التلميذ لحظياً
               </button>
             </div>
           </form>
@@ -467,10 +455,7 @@
               <input type="text" id="searchManageStudents" oninput="renderManageStudentsList()" placeholder="ابحث باسم التلميذ أو الصف..." class="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-institute-800">
             </div>
           </div>
-
-          <div id="manageStudentsList" class="space-y-2">
-            <!-- ديناميكي -->
-          </div>
+          <div id="manageStudentsList" class="space-y-2"></div>
         </div>
       </div>
 
@@ -519,17 +504,15 @@
               </div>
             </div>
 
-            <button type="submit" class="bg-institute-900 hover:bg-institute-950 text-white px-5 py-2 rounded-xl text-xs font-black shadow-md transition-all">
-              نشر المحاضرة للمرحلة الابتدائية
+            <button type="submit" id="btnSaveLecture" class="bg-institute-900 hover:bg-institute-950 text-white px-5 py-2 rounded-xl text-xs font-black shadow-md transition-all">
+              نشر وحفظ المحاضرة
             </button>
           </form>
         </div>
 
         <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm space-y-3">
           <h3 class="text-sm font-black text-slate-900">المحاضرات المرئية المضافة</h3>
-          <div id="manageLecturesList" class="space-y-2">
-            <!-- ديناميكي -->
-          </div>
+          <div id="manageLecturesList" class="space-y-2"></div>
         </div>
       </div>
 
@@ -572,7 +555,7 @@
               <input type="url" id="pdfInputFileUrl" required placeholder="https://..." class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-institute-800" dir="ltr">
             </div>
 
-            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl text-xs font-black shadow-md transition-all">
+            <button type="submit" id="btnSavePdf" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl text-xs font-black shadow-md transition-all">
               + حفظ وإتاحة الملزمة للطلاب
             </button>
           </form>
@@ -580,9 +563,7 @@
 
         <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm space-y-3">
           <h3 class="text-sm font-black text-slate-900">مكتبة الملازم والملخصات الحالية</h3>
-          <div id="managePdfsList" class="space-y-2">
-            <!-- ديناميكي -->
-          </div>
+          <div id="managePdfsList" class="space-y-2"></div>
         </div>
       </div>
 
@@ -590,24 +571,26 @@
 
   </main>
 
-  <!-- الفوتر الثابت مع زر تسجيل الدخول في الأسفل -->
-  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 fixed bottom-0 left-0 right-0 py-3.5 px-4 no-print z-40">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div>
-        <h4 class="font-black text-white text-xs sm:text-sm">معهد السرور التعليمي للمرحلة الابتدائية</h4>
-        <p class="text-[10px] sm:text-xs text-slate-400">بناء الأساس التربوي القويم والنجاح المستمر</p>
+  <!-- =========================================================================
+       الفوتر العادي أسفل الصفحة تماماً (غير مثبت / يظهر عند النزول لأسفل الصفحة فقط)
+       ========================================================================= -->
+  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 py-6 px-4 no-print mt-12 w-full">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-center sm:text-right">
+        <h4 class="font-black text-white text-sm">معهد السرور التعليمي للمرحلة الابتدائية</h4>
+        <p class="text-xs text-slate-400 mt-0.5">بناء الأساس التربوي القويم والنجاح المستمر - بغداد</p>
       </div>
 
       <div id="footerAuthButtonContainer">
-        <button onclick="openTeacherLoginModal()" class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 px-3.5 py-1.5 rounded-xl text-xs font-black shadow-md transition-transform active:scale-95">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-          <span>دخول الأستاذ</span>
+        <button onclick="openTeacherLoginModal()" class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 px-4 py-2 rounded-xl text-xs font-black shadow-md transition-transform active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <span>تسجيل الدخول للأستاذ</span>
         </button>
       </div>
     </div>
   </footer>
 
-  <!-- نافذة تسجيل دخول الأستاذ (بدون أي تلميحات أو placeholders لـ sr) -->
+  <!-- نافذة تسجيل دخول الأستاذ (بدون أي نصوص مسبقة بمربع الإدخال) -->
   <div id="teacherLoginModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl p-6 sm:p-7 w-full max-w-sm shadow-2xl border border-slate-100">
       <div class="text-center mb-5">
@@ -646,7 +629,7 @@
 
   <script>
     /* =========================================================================
-       1. إعدادات وتكوين Supabase مع مشروعك الحقيقي
+       1. إعدادات وتكوين Supabase الحقيقية الخاصة بك
        ========================================================================= */
     const SUPABASE_PROJECT_URL = "https://mzwjkzahwkukmpjsceov.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_6IA5Zo208BNacw2k38RJBg_OORO9bc6";
@@ -662,7 +645,6 @@
       console.warn("Supabase init alert:", err);
     }
 
-    // تحديث علامة الربط السحابي
     function updateSupabaseStatusBadge(status) {
       const badge = document.getElementById('supabaseStatusBadge');
       const dot = document.getElementById('supabaseStatusDot');
@@ -684,69 +666,6 @@
       }
     }
 
-    /* =========================================================================
-       2. البيانات الافتراضية والتخزين المحلي المزدوج
-       ========================================================================= */
-    const DEFAULT_STUDENTS = [
-      { id: "std_1", name: "علي حسين كاظم", grade: "الأول الابتدائي", phone: "07701112233" },
-      { id: "std_2", name: "زينب جاسم محمد", grade: "الأول الابتدائي", phone: "07702223344" },
-      { id: "std_3", name: "حيدر أحمد رضا", grade: "الثاني الابتدائي", phone: "07803334455" },
-      { id: "std_4", name: "مريم صادق فاضل", grade: "الثالث الابتدائي", phone: "07804445566" },
-      { id: "std_5", name: "عبد الله كرار سامي", grade: "الرابع الابتدائي", phone: "07715556677" },
-      { id: "std_6", name: "فاطمة عمار باقر", grade: "الخامس الابتدائي", phone: "07716667788" },
-      { id: "std_7", name: "محمد وسام فاروق", grade: "السادس الابتدائي", phone: "07727778899" },
-      { id: "std_8", name: "نور الزهراء سلام", grade: "السادس الابتدائي", phone: "07728889900" }
-    ];
-
-    const DEFAULT_LECTURES = [
-      {
-        id: "lec_1",
-        subject: "الرياضيات",
-        grade: "السادس الابتدائي",
-        chapter: "الفصل الأول: الأعداد الصحيحة",
-        title: "المحاضرة 1: الأعداد الصحيحة وتمثيلها على مستقيم الأعداد",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        pdfUrl: ""
-      },
-      {
-        id: "lec_2",
-        subject: "قراءتي",
-        grade: "الأول الابتدائي",
-        chapter: "التهجئة الأساسية",
-        title: "المحاضرة 1: درس (دادا) وتجريد حرف الدال والراء",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        pdfUrl: ""
-      },
-      {
-        id: "lec_3",
-        subject: "العلوم",
-        grade: "الخامس الابتدائي",
-        chapter: "الوحدة الثانية: صحة الإنسان",
-        title: "المحاضرة 1: الجهاز الهضمي ووظائفه",
-        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        pdfUrl: ""
-      }
-    ];
-
-    const DEFAULT_PDFS = [
-      {
-        id: "pdf_1",
-        title: "ملزمة الرياضيات الشاملة والوزارية",
-        subject: "الرياضيات",
-        grade: "السادس الابتدائي",
-        chapter: "الفصل الأول والثاني",
-        fileUrl: "https://example.com/math-grade6.pdf"
-      },
-      {
-        id: "pdf_2",
-        title: "كراسة التأسيس والقراءة السريعة",
-        subject: "قراءتي",
-        grade: "الأول الابتدائي",
-        chapter: "الكورس التأسيسي",
-        fileUrl: "https://example.com/reading-grade1.pdf"
-      }
-    ];
-
     function getTodayFormatted() {
       const d = new Date();
       const y = d.getFullYear();
@@ -755,19 +674,10 @@
       return `${y}-${m}-${day}`;
     }
 
-    const todayDateStr = getTodayFormatted();
-    const DEFAULT_ATTENDANCE = [
-      { id: "att_1", studentId: "std_1", grade: "الأول الابتدائي", date: todayDateStr, status: "حاضر" },
-      { id: "att_2", studentId: "std_2", grade: "الأول الابتدائي", date: todayDateStr, status: "غائب" },
-      { id: "att_3", studentId: "std_3", grade: "الثاني الابتدائي", date: todayDateStr, status: "حاضر" },
-      { id: "att_4", studentId: "std_7", grade: "السادس الابتدائي", date: todayDateStr, status: "حاضر" },
-      { id: "att_5", studentId: "std_8", grade: "السادس الابتدائي", date: todayDateStr, status: "غائب" }
-    ];
-
-    let students = JSON.parse(localStorage.getItem('soroor_elem_students')) || DEFAULT_STUDENTS;
-    let lectures = JSON.parse(localStorage.getItem('soroor_elem_lectures')) || DEFAULT_LECTURES;
-    let pdfDocs = JSON.parse(localStorage.getItem('soroor_elem_pdfs')) || DEFAULT_PDFS;
-    let attendanceLog = JSON.parse(localStorage.getItem('soroor_elem_att_log')) || DEFAULT_ATTENDANCE;
+    let students = JSON.parse(localStorage.getItem('soroor_students')) || [];
+    let lectures = JSON.parse(localStorage.getItem('soroor_lectures')) || [];
+    let attendanceLog = JSON.parse(localStorage.getItem('soroor_attendance')) || [];
+    let pdfDocs = JSON.parse(localStorage.getItem('soroor_pdfs')) || [];
 
     let isTeacherLoggedIn = false;
     let currentDailyGrade = 'الأول الابتدائي';
@@ -775,16 +685,16 @@
     let currentStudentPdfFilter = 'all';
 
     function saveLocal() {
-      localStorage.setItem('soroor_elem_students', JSON.stringify(students));
-      localStorage.setItem('soroor_elem_lectures', JSON.stringify(lectures));
-      localStorage.setItem('soroor_elem_pdfs', JSON.stringify(pdfDocs));
-      localStorage.setItem('soroor_elem_att_log', JSON.stringify(attendanceLog));
+      localStorage.setItem('soroor_students', JSON.stringify(students));
+      localStorage.setItem('soroor_lectures', JSON.stringify(lectures));
+      localStorage.setItem('soroor_attendance', JSON.stringify(attendanceLog));
+      localStorage.setItem('soroor_pdfs', JSON.stringify(pdfDocs));
     }
 
     /* =========================================================================
-       3. المزامنة مع خوادم Supabase
+       2. المزامنة السحابية اللحظية مع Supabase
        ========================================================================= */
-    async function syncWithSupabase() {
+    async function syncWithSupabase(showAlert = false) {
       if (!supabaseClient) {
         updateSupabaseStatusBadge('offline');
         return;
@@ -793,7 +703,6 @@
       updateSupabaseStatusBadge('testing');
 
       try {
-        // فحص وجود الجداول وجلب البيانات
         const [stdRes, lecRes, attRes, pdfRes] = await Promise.allSettled([
           supabaseClient.from('students').select('*'),
           supabaseClient.from('lectures').select('*'),
@@ -801,170 +710,66 @@
           supabaseClient.from('pdf_resources').select('*')
         ]);
 
-        let hasAnySuccess = false;
+        let hasSuccess = false;
 
         if (stdRes.status === 'fulfilled' && !stdRes.value.error && stdRes.value.data) {
-          hasAnySuccess = true;
-          if (stdRes.value.data.length > 0) {
-            students = stdRes.value.data;
-          } else {
-            // مزامنة البيانات الأولية مع Supabase إذا كانت الجداول فارغة
-            await supabaseClient.from('students').upsert(students);
-          }
+          hasSuccess = true;
+          students = stdRes.value.data;
         }
 
         if (lecRes.status === 'fulfilled' && !lecRes.value.error && lecRes.value.data) {
-          hasAnySuccess = true;
-          if (lecRes.value.data.length > 0) {
-            lectures = lecRes.value.data.map(l => ({
-              id: l.id,
-              subject: l.subject,
-              chapter: l.chapter || '',
-              title: l.title,
-              grade: l.grade,
-              videoUrl: l.video_url || l.videoUrl || '',
-              pdfUrl: l.pdf_url || l.pdfUrl || ''
-            }));
-          } else {
-            await supabaseClient.from('lectures').upsert(lectures.map(l => ({
-              id: String(l.id),
-              subject: l.subject,
-              chapter: l.chapter,
-              title: l.title,
-              grade: l.grade,
-              video_url: l.videoUrl,
-              pdf_url: l.pdfUrl
-            })));
-          }
+          hasSuccess = true;
+          lectures = lecRes.value.data.map(l => ({
+            id: l.id,
+            subject: l.subject,
+            chapter: l.chapter || '',
+            title: l.title,
+            grade: l.grade,
+            videoUrl: l.video_url || l.videoUrl || '',
+            pdfUrl: l.pdf_url || l.pdfUrl || ''
+          }));
         }
 
         if (attRes.status === 'fulfilled' && !attRes.value.error && attRes.value.data) {
-          hasAnySuccess = true;
-          if (attRes.value.data.length > 0) {
-            attendanceLog = attRes.value.data.map(a => ({
-              id: a.id,
-              studentId: a.student_id || a.studentId,
-              grade: a.grade,
-              date: a.date,
-              status: a.status
-            }));
-          }
+          hasSuccess = true;
+          attendanceLog = attRes.value.data.map(a => ({
+            id: a.id,
+            studentId: a.student_id || a.studentId,
+            grade: a.grade,
+            date: a.date,
+            status: a.status
+          }));
         }
 
         if (pdfRes.status === 'fulfilled' && !pdfRes.value.error && pdfRes.value.data) {
-          hasAnySuccess = true;
-          if (pdfRes.value.data.length > 0) {
-            pdfDocs = pdfRes.value.data.map(p => ({
-              id: p.id,
-              title: p.title,
-              grade: p.grade,
-              subject: p.subject,
-              chapter: p.chapter || '',
-              fileUrl: p.file_url || p.url || p.fileUrl || ''
-            }));
-          }
+          hasSuccess = true;
+          pdfDocs = pdfRes.value.data.map(p => ({
+            id: p.id,
+            title: p.title,
+            grade: p.grade,
+            subject: p.subject,
+            chapter: p.chapter || '',
+            fileUrl: p.url || p.file_url || p.fileUrl || ''
+          }));
         }
 
-        if (hasAnySuccess) {
+        if (hasSuccess) {
           isSupabaseOnline = true;
           updateSupabaseStatusBadge('connected');
+          saveLocal();
+          refreshAllViews();
+          if (showAlert) alert('تمت المزامنة السحابية بنجاح!');
         } else {
           isSupabaseOnline = false;
           updateSupabaseStatusBadge('offline');
         }
-
-        saveLocal();
-        refreshAllViews();
       } catch (err) {
-        console.warn("Supabase Sync Fallback to LocalStorage:", err);
+        console.warn("Supabase fetch error:", err);
         isSupabaseOnline = false;
         updateSupabaseStatusBadge('offline');
       }
     }
 
-    // دوال مساعدة لرفع البيانات سحابياً
-    async function pushStudentToCloud(student) {
-      if (isSupabaseOnline && supabaseClient) {
-        try {
-          await supabaseClient.from('students').upsert([student]);
-        } catch (e) { console.error(e); }
-      }
-    }
-
-    async function deleteStudentFromCloud(id) {
-      if (isSupabaseOnline && supabaseClient) {
-        try {
-          await supabaseClient.from('students').delete().eq('id', id);
-          await supabaseClient.from('attendance').delete().eq('student_id', id);
-        } catch (e) { console.error(e); }
-      }
-    }
-
-    async function pushLectureToCloud(lec) {
-      if (isSupabaseOnline && supabaseClient) {
-        try {
-          await supabaseClient.from('lectures').upsert([{
-            id: String(lec.id),
-            subject: lec.subject,
-            chapter: lec.chapter,
-            title: lec.title,
-            grade: lec.grade,
-            video_url: lec.videoUrl,
-            pdf_url: lec.pdfUrl
-          }]);
-        } catch (e) { console.error(e); }
-      }
-    }
-
-    async function deleteLectureFromCloud(id) {
-      if (isSupabaseOnline && supabaseClient) {
-        try {
-          await supabaseClient.from('lectures').delete().eq('id', String(id));
-        } catch (e) { console.error(e); }
-      }
-    }
-
-    async function pushAttendanceToCloud(records) {
-      if (isSupabaseOnline && supabaseClient) {
-        try {
-          const rows = records.map(r => ({
-            id: String(r.id),
-            student_id: String(r.studentId),
-            grade: r.grade,
-            date: r.date,
-            status: r.status
-          }));
-          await supabaseClient.from('attendance').upsert(rows);
-        } catch (e) { console.error(e); }
-      }
-    }
-
-    async function pushPdfToCloud(pdf) {
-      if (isSupabaseOnline && supabaseClient) {
-        try {
-          await supabaseClient.from('pdf_resources').upsert([{
-            id: String(pdf.id),
-            title: pdf.title,
-            grade: pdf.grade,
-            subject: pdf.subject,
-            chapter: pdf.chapter,
-            url: pdf.fileUrl
-          }]);
-        } catch (e) { console.error(e); }
-      }
-    }
-
-    async function deletePdfFromCloud(id) {
-      if (isSupabaseOnline && supabaseClient) {
-        try {
-          await supabaseClient.from('pdf_resources').delete().eq('id', String(id));
-        } catch (e) { console.error(e); }
-      }
-    }
-
-    /* =========================================================================
-       4. دوال التنسيق والأدوات المساعدة
-       ========================================================================= */
     function convertYouTubeUrl(url) {
       if (!url) return '';
       let videoId = '';
@@ -988,7 +793,7 @@
     }
 
     /* =========================================================================
-       5. نظام تسجيل الدخول للأستاذ (sr / 9900)
+       3. نظام تسجيل الدخول للأستاذ (sr / 9900)
        ========================================================================= */
     function openTeacherLoginModal() {
       document.getElementById('teacherLoginModal').classList.remove('hidden');
@@ -1006,7 +811,6 @@
       const u = document.getElementById('inputUsername').value.trim();
       const p = document.getElementById('inputPassword').value.trim();
 
-      // التحقق من بيانات الأستاذ sr و 9900
       if (u === 'sr' && p === '9900') {
         isTeacherLoggedIn = true;
         closeTeacherLoginModal();
@@ -1035,9 +839,9 @@
         teacherPortal.classList.remove('hidden');
         badge.classList.remove('hidden');
         footerAuth.innerHTML = `
-          <button onclick="performTeacherLogout()" class="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-black shadow-md transition-transform active:scale-95">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-            <span>خروج الأستاذ</span>
+          <button onclick="performTeacherLogout()" class="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-black shadow-md transition-transform active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            <span>تسجيل خروج الأستاذ</span>
           </button>
         `;
         renderDailyAttendance();
@@ -1049,9 +853,9 @@
         studentPortal.classList.remove('hidden');
         badge.classList.add('hidden');
         footerAuth.innerHTML = `
-          <button onclick="openTeacherLoginModal()" class="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 px-3.5 py-1.5 rounded-xl text-xs font-black shadow-md transition-transform active:scale-95">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-            <span>دخول الأستاذ</span>
+          <button onclick="openTeacherLoginModal()" class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 px-4 py-2 rounded-xl text-xs font-black shadow-md transition-transform active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span>تسجيل الدخول للأستاذ</span>
           </button>
         `;
         renderStudentLectures();
@@ -1060,7 +864,7 @@
     }
 
     /* =========================================================================
-       6. واجهة الطالب: التنقل والفلترة
+       4. واجهة الطالب: التبديل والفلترة والعرض
        ========================================================================= */
     function toggleStudentSection(section) {
       const lecBtn = document.getElementById('tabStudentLecturesBtn');
@@ -1208,7 +1012,7 @@
     }
 
     /* =========================================================================
-       7. لوحة الأستاذ: التنقل بين الأقسام
+       5. لوحة الأستاذ: التبويبات والحضور اليومي
        ========================================================================= */
     function switchTeacherTab(tabKey) {
       const views = {
@@ -1244,9 +1048,6 @@
       if (tabKey === 'managePdfs') renderManagePdfsList();
     }
 
-    /* =========================================================================
-       8. نظام تفقد الحضور اليومي
-       ========================================================================= */
     function setDailyAttendanceGrade(grade) {
       currentDailyGrade = grade;
       document.querySelectorAll('.daily-att-chip').forEach(btn => {
@@ -1277,28 +1078,36 @@
       const curDate = getSelectedDate();
       const existingIdx = attendanceLog.findIndex(a => String(a.studentId) === String(studentId) && a.date === curDate);
 
-      let updatedRecord = null;
-
+      let record = null;
       if (existingIdx > -1) {
-        const nextStatus = attendanceLog[existingIdx].status === 'حاضر' ? 'غائب' : 'حاضر';
-        attendanceLog[existingIdx].status = nextStatus;
-        updatedRecord = attendanceLog[existingIdx];
+        attendanceLog[existingIdx].status = attendanceLog[existingIdx].status === 'حاضر' ? 'غائب' : 'حاضر';
+        record = attendanceLog[existingIdx];
       } else {
-        const newRecord = {
+        record = {
           id: 'att_' + Date.now(),
           studentId: String(studentId),
           grade: currentDailyGrade,
           date: curDate,
           status: 'حاضر'
         };
-        attendanceLog.push(newRecord);
-        updatedRecord = newRecord;
+        attendanceLog.push(record);
       }
 
       saveLocal();
       renderDailyAttendance();
-      if (updatedRecord) {
-        await pushAttendanceToCloud([updatedRecord]);
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('attendance').upsert([{
+            id: record.id,
+            student_id: record.studentId,
+            grade: record.grade,
+            date: record.date,
+            status: record.status
+          }]);
+        } catch (e) {
+          console.error("Attendance cloud sync error:", e);
+        }
       }
     }
 
@@ -1314,7 +1123,7 @@
         const idx = attendanceLog.findIndex(a => String(a.studentId) === String(st.id) && a.date === curDate);
         if (idx > -1) {
           attendanceLog[idx].status = 'حاضر';
-          toSync.push(attendanceLog[idx]);
+          toSync.push({ id: attendanceLog[idx].id, student_id: st.id, grade: st.grade, date: curDate, status: 'حاضر' });
         } else {
           const newAtt = {
             id: 'att_' + Date.now() + Math.random().toString().slice(2, 5),
@@ -1324,13 +1133,20 @@
             status: 'حاضر'
           };
           attendanceLog.push(newAtt);
-          toSync.push(newAtt);
+          toSync.push({ id: newAtt.id, student_id: st.id, grade: st.grade, date: curDate, status: 'حاضر' });
         }
       });
 
       saveLocal();
       renderDailyAttendance();
-      await pushAttendanceToCloud(toSync);
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('attendance').upsert(toSync);
+        } catch (e) {
+          console.error("Bulk sync error:", e);
+        }
+      }
     }
 
     function renderDailyAttendance() {
@@ -1404,7 +1220,7 @@
     }
 
     /* =========================================================================
-       9. التقارير والطباعة وتصدير PDF
+       6. التقارير والطباعة وتصدير PDF
        ========================================================================= */
     function toggleReportScopeInputs() {
       const type = document.getElementById('reportScopeType').value;
@@ -1532,10 +1348,14 @@
     }
 
     /* =========================================================================
-       10. إدارة الطلاب
+       7. إدارة الطلاب والمحاضرات والملازم
        ========================================================================= */
     async function handleAddNewStudent(e) {
       e.preventDefault();
+      const btn = document.getElementById('btnSaveStudent');
+      btn.innerText = "جاري الحفظ سحابياً...";
+      btn.disabled = true;
+
       const name = document.getElementById('newStudentName').value.trim();
       const grade = document.getElementById('newStudentGrade').value;
       const phone = document.getElementById('newStudentPhone').value.trim();
@@ -1547,25 +1367,42 @@
         phone
       };
 
-      students.push(newStudent);
-      saveLocal();
+      try {
+        if (supabaseClient) {
+          const { error } = await supabaseClient.from('students').insert([newStudent]);
+          if (error) throw error;
+        }
 
-      document.getElementById('addNewStudentForm').reset();
-      renderManageStudentsList();
-      renderDailyAttendance();
+        students.push(newStudent);
+        saveLocal();
 
-      await pushStudentToCloud(newStudent);
-      alert(`تم إضافة التلميذ: ${name}`);
+        document.getElementById('addNewStudentForm').reset();
+        renderManageStudentsList();
+        renderDailyAttendance();
+        alert(`تم إضافة التلميذ (${name}) سحابياً بنجاح!`);
+      } catch (err) {
+        alert("فشل الحفظ في السيرفر: " + err.message);
+      } finally {
+        btn.innerText = "+ حفظ التلميذ لحظياً";
+        btn.disabled = false;
+      }
     }
 
     async function removeStudent(studentId) {
-      if (!confirm('هل أنت متأكد من حذف هذا التلميذ نهائياً من النظام؟')) return;
-      students = students.filter(s => String(s.id) !== String(studentId));
-      attendanceLog = attendanceLog.filter(l => String(l.studentId) !== String(studentId));
-      saveLocal();
-      renderManageStudentsList();
-      renderDailyAttendance();
-      await deleteStudentFromCloud(studentId);
+      if (!confirm('هل أنت متأكد من حذف هذا التلميذ نهائياً من السيرفر؟')) return;
+      try {
+        if (supabaseClient) {
+          await supabaseClient.from('students').delete().eq('id', studentId);
+          await supabaseClient.from('attendance').delete().eq('student_id', studentId);
+        }
+        students = students.filter(s => String(s.id) !== String(studentId));
+        attendanceLog = attendanceLog.filter(l => String(l.studentId) !== String(studentId));
+        saveLocal();
+        renderManageStudentsList();
+        renderDailyAttendance();
+      } catch (err) {
+        alert("فشل الحذف من السيرفر: " + err.message);
+      }
     }
 
     function renderManageStudentsList() {
@@ -1609,11 +1446,12 @@
       }).join('');
     }
 
-    /* =========================================================================
-       11. إدارة المحاضرات المرئية
-       ========================================================================= */
     async function handleAddNewLecture(e) {
       e.preventDefault();
+      const btn = document.getElementById('btnSaveLecture');
+      btn.innerText = "جاري النشر سحابياً...";
+      btn.disabled = true;
+
       const subject = document.getElementById('lecInputSubject').value.trim();
       const grade = document.getElementById('lecInputGrade').value;
       const chapter = document.getElementById('lecInputChapter').value.trim();
@@ -1631,24 +1469,48 @@
         pdfUrl
       };
 
-      lectures.unshift(newLec);
-      saveLocal();
+      try {
+        if (supabaseClient) {
+          const { error } = await supabaseClient.from('lectures').insert([{
+            id: String(newLec.id),
+            subject: newLec.subject,
+            chapter: newLec.chapter,
+            title: newLec.title,
+            grade: newLec.grade,
+            video_url: newLec.videoUrl,
+            pdf_url: newLec.pdfUrl
+          }]);
+          if (error) throw error;
+        }
 
-      document.getElementById('addNewLectureForm').reset();
-      renderManageLecturesList();
-      renderStudentLectures();
+        lectures.unshift(newLec);
+        saveLocal();
 
-      await pushLectureToCloud(newLec);
-      alert('تم نشر المحاضرة بنجاح!');
+        document.getElementById('addNewLectureForm').reset();
+        renderManageLecturesList();
+        renderStudentLectures();
+        alert('تم نشر وحفظ المحاضرة سحابياً بنجاح!');
+      } catch (err) {
+        alert("فشل نشر المحاضرة في السيرفر: " + err.message);
+      } finally {
+        btn.innerText = "نشر وحفظ المحاضرة";
+        btn.disabled = false;
+      }
     }
 
     async function removeLecture(id) {
-      if (!confirm('حذف هذه المحاضرة؟')) return;
-      lectures = lectures.filter(l => String(l.id) !== String(id));
-      saveLocal();
-      renderManageLecturesList();
-      renderStudentLectures();
-      await deleteLectureFromCloud(id);
+      if (!confirm('حذف هذه المحاضرة نهائياً؟')) return;
+      try {
+        if (supabaseClient) {
+          await supabaseClient.from('lectures').delete().eq('id', String(id));
+        }
+        lectures = lectures.filter(l => String(l.id) !== String(id));
+        saveLocal();
+        renderManageLecturesList();
+        renderStudentLectures();
+      } catch (err) {
+        alert("فشل الحذف من السيرفر: " + err.message);
+      }
     }
 
     function renderManageLecturesList() {
@@ -1679,11 +1541,12 @@
       `).join('');
     }
 
-    /* =========================================================================
-       12. إدارة مكتبة ملازم الـ PDF
-       ========================================================================= */
     async function handleAddNewPdf(e) {
       e.preventDefault();
+      const btn = document.getElementById('btnSavePdf');
+      btn.innerText = "جاري الحفظ سحابياً...";
+      btn.disabled = true;
+
       const title = document.getElementById('pdfInputTitle').value.trim();
       const subject = document.getElementById('pdfInputSubject').value.trim();
       const grade = document.getElementById('pdfInputGrade').value;
@@ -1699,24 +1562,47 @@
         fileUrl
       };
 
-      pdfDocs.unshift(newPdf);
-      saveLocal();
+      try {
+        if (supabaseClient) {
+          const { error } = await supabaseClient.from('pdf_resources').insert([{
+            id: String(newPdf.id),
+            title: newPdf.title,
+            grade: newPdf.grade,
+            subject: newPdf.subject,
+            chapter: newPdf.chapter,
+            url: newPdf.fileUrl
+          }]);
+          if (error) throw error;
+        }
 
-      document.getElementById('addNewPdfForm').reset();
-      renderManagePdfsList();
-      renderStudentPdfs();
+        pdfDocs.unshift(newPdf);
+        saveLocal();
 
-      await pushPdfToCloud(newPdf);
-      alert('تمت إضافة الملزمة بنجاح!');
+        document.getElementById('addNewPdfForm').reset();
+        renderManagePdfsList();
+        renderStudentPdfs();
+        alert('تمت إضافة الملزمة سحابياً بنجاح!');
+      } catch (err) {
+        alert("فشل حفظ الملزمة في السيرفر: " + err.message);
+      } finally {
+        btn.innerText = "+ حفظ وإتاحة الملزمة للطلاب";
+        btn.disabled = false;
+      }
     }
 
     async function removePdf(id) {
-      if (!confirm('حذف هذا الملف؟')) return;
-      pdfDocs = pdfDocs.filter(p => String(p.id) !== String(id));
-      saveLocal();
-      renderManagePdfsList();
-      renderStudentPdfs();
-      await deletePdfFromCloud(id);
+      if (!confirm('حذف هذا الملف نهائياً؟')) return;
+      try {
+        if (supabaseClient) {
+          await supabaseClient.from('pdf_resources').delete().eq('id', String(id));
+        }
+        pdfDocs = pdfDocs.filter(p => String(p.id) !== String(id));
+        saveLocal();
+        renderManagePdfsList();
+        renderStudentPdfs();
+      } catch (err) {
+        alert("فشل الحذف من السيرفر: " + err.message);
+      }
     }
 
     function renderManagePdfsList() {
@@ -1757,7 +1643,7 @@
     }
 
     /* =========================================================================
-       13. تشغيل النظام الأولي عند فتح الصفحة
+       8. تشغيل النظام الأولي عند فتح الصفحة
        ========================================================================= */
     document.addEventListener('DOMContentLoaded', () => {
       const datePicker = document.getElementById('attendanceDatePicker');
