@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>منصة معهد السرور التعليمية</title>
+  
+  <!-- Tailwind CSS Framework -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Arabic Font - Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            cairo: ['Cairo', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
+              950: '#082f49',
+            },
+            accent: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 0.75rem 0.75rem 0 0;
+      background: #000;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    /* تنسيقات الطباعة وتصدير PDF */
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      header, footer, #teacherNav, #loginModal, .no-print, button, .action-buttons {
+        display: none !important;
+      }
+      #printArea {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .printable-card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+      }
+      table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+      }
+      th, td {
+        border: 1px solid #333 !important;
+        padding: 6px 8px !important;
+        font-size: 11pt !important;
+      }
+      th {
+        background-color: #f2f2f2 !important;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col justify-between antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- شريط الرأس الرئيسي -->
+  <header class="bg-gradient-to-r from-brand-950 via-brand-900 to-indigo-950 text-white shadow-lg sticky top-0 z-40 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 py-3 sm:py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-accent-500 to-amber-300 text-brand-950 flex items-center justify-center font-black text-2xl shadow-md border border-amber-200/50">
+          س
+        </div>
+        <div>
+          <h1 class="font-black text-lg sm:text-xl tracking-tight leading-tight flex items-center gap-2">
+            معهد السرور التعليمي
+            <span class="text-[10px] bg-white/15 px-2 py-0.5 rounded-full font-semibold text-amber-300">المرحلة الابتدائية</span>
+          </h1>
+          <p class="text-xs text-sky-200/80 font-medium">المنصة التعليمية للدروس والملازم والمتابعة المباشرة</p>
+        </div>
+      </div>
+      
+      <!-- شارة توضيحية لصفحة الأستاذ -->
+      <div id="teacherSessionBadge" class="hidden flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          لوحة الإدارة نشطة
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto p-3 sm:p-5 md:p-6 space-y-6">
+
+    <!-- ========================================== -->
+    <!--           1. واجهة الطالب (الافتراضية)       -->
+    <!-- ========================================== -->
+    <section id="studentPortalView" class="space-y-6">
+      
+      <!-- أزرار التبديل الرئيسية للطلاب -->
+      <div class="flex bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200/80 gap-1.5 max-w-md mx-auto">
+        <button id="tabStudentLecturesBtn" onclick="toggleStudentSection('lectures')" class="flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-center transition-all bg-brand-900 text-white shadow-sm flex items-center justify-center gap-2">
+          <svg class="w-4 h-4 text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          <span>المحاضرات المرئية</span>
+        </button>
+        <button id="tabStudentPdfsBtn" onclick="toggleStudentSection('pdfs')" class="flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-center transition-all text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-2">
+          <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <span>مكتبة الملازم والـ PDF</span>
+        </button>
+      </div>
+
+      <!-- محتوى المحاضرات المرئية للطلاب -->
+      <div id="studentLecturesContainer" class="space-y-4">
+        <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm space-y-3">
+          <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+            <span class="text-xs font-black text-slate-500 whitespace-nowrap pl-1">المرحلة:</span>
+            <button onclick="setStudentLecGradeFilter('all')" class="student-lec-filter active px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-brand-900 text-white border-brand-900 shadow-sm" data-grade="all">الكل</button>
+            <button onclick="setStudentLecGradeFilter('الأول الابتدائي')" class="student-lec-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="الأول الابتدائي">الأول الابتدائي</button>
+            <button onclick="setStudentLecGradeFilter('الثاني الابتدائي')" class="student-lec-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="الثاني الابتدائي">الثاني الابتدائي</button>
+            <button onclick="setStudentLecGradeFilter('الثالث الابتدائي')" class="student-lec-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="الثالث الابتدائي">الثالث الابتدائي</button>
+            <button onclick="setStudentLecGradeFilter('الرابع الابتدائي')" class="student-lec-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="الرابع الابتدائي">الرابع الابتدائي</button>
+            <button onclick="setStudentLecGradeFilter('الخامس الابتدائي')" class="student-lec-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="الخامس الابتدائي">الخامس الابتدائي</button>
+            <button onclick="setStudentLecGradeFilter('السادس الابتدائي')" class="student-lec-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="السادس الابتدائي">السادس الابتدائي</button>
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p class="text-xs text-slate-500 font-semibold" id="studentLecCountNotice">جاري تحميل المحاضرات...</p>
+            <div class="w-full sm:w-72">
+              <input type="text" id="studentLecSearch" oninput="renderStudentLectures()" placeholder="ابحث باسم المادة، الفصل، أو عنوان المحاضرة..." class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50/50">
+            </div>
+          </div>
+        </div>
+
+        <div id="studentLecturesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          <!-- ديناميكي -->
+        </div>
+      </div>
+
+      <!-- محتوى مكتبة الـ PDF للطلاب -->
+      <div id="studentPdfsContainer" class="space-y-4 hidden">
+        <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm space-y-3">
+          <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+            <span class="text-xs font-black text-slate-500 whitespace-nowrap pl-1">المرحلة:</span>
+            <button onclick="setStudentPdfGradeFilter('all')" class="student-pdf-filter active px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-brand-900 text-white border-brand-900 shadow-sm" data-grade="all">الكل</button>
+            <button onclick="setStudentPdfGradeFilter('الأول الابتدائي')" class="student-pdf-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="الأول الابتدائي">الأول الابتدائي</button>
+            <button onclick="setStudentPdfGradeFilter('الثاني الابتدائي')" class="student-pdf-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="الثاني الابتدائي">الثاني الابتدائي</button>
+            <button onclick="setStudentPdfGradeFilter('الثالث الابتدائي')" class="student-pdf-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="الثالث الابتدائي">الثالث الابتدائي</button>
+            <button onclick="setStudentPdfGradeFilter('الرابع الابتدائي')" class="student-pdf-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="الرابع الابتدائي">الرابع الابتدائي</button>
+            <button onclick="setStudentPdfGradeFilter('الخامس الابتدائي')" class="student-pdf-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="الخامس الابتدائي">الخامس الابتدائي</button>
+            <button onclick="setStudentPdfGradeFilter('السادس الابتدائي')" class="student-pdf-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200" data-grade="السادس الابتدائي">السادس الابتدائي</button>
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p class="text-xs text-slate-500 font-semibold" id="studentPdfCountNotice">جاري تحميل الملازم والملخصات...</p>
+            <div class="w-full sm:w-72">
+              <input type="text" id="studentPdfSearch" oninput="renderStudentPdfs()" placeholder="ابحث باسم المادة، الملزمة، أو الفصل..." class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50/50">
+            </div>
+          </div>
+        </div>
+
+        <div id="studentPdfsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          <!-- ديناميكي -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!--           2. واجهة الأستاذ (المحمية)        -->
+    <!-- ========================================== -->
+    <section id="teacherPortalView" class="hidden space-y-6">
+      
+      <!-- شريط لوحة تحكم الأستاذ والتبويبات مع مؤشر الربط بقاعدة البيانات -->
+      <div id="teacherNav" class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200/90 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+          <button onclick="switchTeacherTab('dailyAttendance')" id="tNavAttendance" class="t-nav-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-black whitespace-nowrap bg-brand-900 text-white transition-all shadow-sm flex items-center gap-2">
+            <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span>تسجيل الحضور اليومي</span>
+          </button>
+          <button onclick="switchTeacherTab('attendanceReports')" id="tNavReports" class="t-nav-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-black whitespace-nowrap text-slate-600 hover:bg-slate-100 transition-all flex items-center gap-2">
+            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>التقارير وتصدير الطباعة</span>
+          </button>
+          <button onclick="switchTeacherTab('manageStudents')" id="tNavStudents" class="t-nav-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-black whitespace-nowrap text-slate-600 hover:bg-slate-100 transition-all flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            <span>إدارة الطلاب والتنسيب</span>
+          </button>
+          <button onclick="switchTeacherTab('manageLectures')" id="tNavLectures" class="t-nav-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-black whitespace-nowrap text-slate-600 hover:bg-slate-100 transition-all flex items-center gap-2">
+            <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>المحاضرات المرئية</span>
+          </button>
+          <button onclick="switchTeacherTab('managePdfs')" id="tNavPdfs" class="t-nav-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-black whitespace-nowrap text-slate-600 hover:bg-slate-100 transition-all flex items-center gap-2">
+            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>ملفات الـ PDF</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 justify-between lg:justify-end">
+          <!-- علامة مؤشر حالة الربط مع قاعدة البيانات -->
+          <div id="firebaseStatusBadge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors bg-amber-50 text-amber-800 border-amber-200">
+            <span id="firebaseStatusDot" class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+            <span id="firebaseStatusText">قاعدة البيانات: محلي (Offline)</span>
+          </div>
+
+          <button onclick="performTeacherLogout()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            <span>خروج</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- تبويب: الحضور والغياب اليومي -->
+      <div id="tViewDailyAttendance" class="space-y-4">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm space-y-4">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div>
+              <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+                <span>سجل الحضور والغياب اليومي للطلبة</span>
+                <span class="text-xs bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded-lg border border-brand-100 font-bold">تسجيل مؤرخ</span>
+              </h2>
+              <p class="text-xs text-slate-500 mt-0.5">سجل الحضور بدقة ليوم محدد مع إمكانية إشعار أولياء الأمور فترجياً عبر واتساب</p>
+            </div>
+
+            <!-- منتقي التاريخ اليومي -->
+            <div class="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-200">
+              <label class="text-xs font-bold text-slate-700 whitespace-nowrap flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-brand-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <span>تاريخ الحضور:</span>
+              </label>
+              <input type="date" id="attendanceDatePicker" onchange="handleAttendanceDateChange()" class="text-xs font-black px-3 py-1.5 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+          </div>
+
+          <!-- شريط اختيار الصفوف الابتدائية للحضور -->
+          <div class="flex items-center justify-between gap-2 flex-wrap">
+            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 w-full md:w-auto">
+              <span class="text-xs font-bold text-slate-500 whitespace-nowrap pl-1">الصف الابتدائي:</span>
+              <button onclick="setDailyAttGrade('الأول الابتدائي')" class="daily-att-grade-btn active px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-brand-900 text-white shadow-sm" data-grade="الأول الابتدائي">الأول الابتدائي</button>
+              <button onclick="setDailyAttGrade('الثاني الابتدائي')" class="daily-att-grade-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-slate-100 text-slate-700 hover:bg-slate-200" data-grade="الثاني الابتدائي">الثاني الابتدائي</button>
+              <button onclick="setDailyAttGrade('الثالث الابتدائي')" class="daily-att-grade-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-slate-100 text-slate-700 hover:bg-slate-200" data-grade="الثالث الابتدائي">الثالث الابتدائي</button>
+              <button onclick="setDailyAttGrade('الرابع الابتدائي')" class="daily-att-grade-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-slate-100 text-slate-700 hover:bg-slate-200" data-grade="الرابع الابتدائي">الرابع الابتدائي</button>
+              <button onclick="setDailyAttGrade('الخامس الابتدائي')" class="daily-att-grade-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-slate-100 text-slate-700 hover:bg-slate-200" data-grade="الخامس الابتدائي">الخامس الابتدائي</button>
+              <button onclick="setDailyAttGrade('السادس الابتدائي')" class="daily-att-grade-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-slate-100 text-slate-700 hover:bg-slate-200" data-grade="السادس الابتدائي">السادس الابتدائي</button>
+            </div>
+
+            <button onclick="markAllGradePresentToday()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-black shadow-sm transition-all flex items-center gap-1.5 w-full md:w-auto justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <span>تحديد جميع طلاب الصف حاضرين اليوم</span>
+            </button>
+          </div>
+
+          <!-- العدادات اليومية -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-center">
+            <div class="bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
+              <span class="text-[11px] text-slate-500 font-bold block">إجمالي طلاب الصف</span>
+              <span id="statDailyTotal" class="text-lg font-black text-slate-900">0</span>
+            </div>
+            <div class="bg-emerald-50 p-2.5 rounded-2xl border border-emerald-100">
+              <span class="text-[11px] text-emerald-700 font-bold block">الحاضرون اليوم</span>
+              <span id="statDailyPresent" class="text-lg font-black text-emerald-700">0</span>
+            </div>
+            <div class="bg-red-50 p-2.5 rounded-2xl border border-red-100">
+              <span class="text-[11px] text-red-700 font-bold block">الغائبون اليوم</span>
+              <span id="statDailyAbsent" class="text-lg font-black text-red-700">0</span>
+            </div>
+            <div class="bg-blue-50 p-2.5 rounded-2xl border border-blue-100">
+              <span class="text-[11px] text-blue-700 font-bold block">نسبة الحضور</span>
+              <span id="statDailyRate" class="text-lg font-black text-blue-700">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- قائمة بطاقات الحضور اليومي -->
+        <div id="dailyAttendanceListContainer" class="space-y-2.5">
+          <!-- ديناميكي -->
+        </div>
+      </div>
+
+      <!-- تبويب: التقارير والطباعة -->
+      <div id="tViewAttendanceReports" class="space-y-4 hidden">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm space-y-4 no-print">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div>
+              <h2 class="text-base sm:text-lg font-black text-slate-900">تقارير الحضور والغياب الرسمية</h2>
+              <p class="text-xs text-slate-500">اختر المعايير لتوليد تقرير مفصل جاهز للطباعة أو الحفظ كملف PDF</p>
+            </div>
+            <button onclick="window.print()" class="bg-brand-900 hover:bg-brand-950 text-white px-4 py-2 rounded-xl text-xs font-black shadow-md transition-all flex items-center justify-center gap-2 self-start sm:self-auto">
+              <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+              <span>طباعة / تصدير PDF للتقرير</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">نوع التقرير</label>
+              <select id="reportScopeType" onchange="toggleReportScopeInputs()" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                <option value="single">يوم محدد ومعين</option>
+                <option value="range">فترة زمنية (من تاريخ - إلى تاريخ)</option>
+              </select>
+            </div>
+
+            <div id="reportSingleDateWrapper">
+              <label class="block text-xs font-bold text-slate-600 mb-1">اليوم المعين</label>
+              <input type="date" id="reportSingleDate" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+
+            <div id="reportRangeDateFromWrapper" class="hidden">
+              <label class="block text-xs font-bold text-slate-600 mb-1">من تاريخ</label>
+              <input type="date" id="reportDateFrom" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+            <div id="reportRangeDateToWrapper" class="hidden">
+              <label class="block text-xs font-bold text-slate-600 mb-1">إلى تاريخ</label>
+              <input type="date" id="reportDateTo" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">الصف الابتدائي</label>
+              <select id="reportGradeFilter" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                <option value="all">كافة الصفوف الابتدائية</option>
+                <option value="الأول الابتدائي">الأول الابتدائي</option>
+                <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                <option value="السادس الابتدائي">السادس الابتدائي</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-1">
+            <button onclick="generateAttendanceReport()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-xs font-black shadow-sm transition-all flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <span>توليد وعرض التقرير</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- منطقة التقرير القابلة للطباعة -->
+        <div id="printArea" class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4 printable-card">
+          <div class="border-b-2 border-slate-800 pb-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-brand-950 text-amber-400 flex items-center justify-center font-black text-2xl border border-slate-700">
+                س
+              </div>
+              <div>
+                <h3 class="text-lg font-black text-slate-900">معهد السرور التعليمي</h3>
+                <p class="text-xs text-slate-600 font-bold">تقرير تفقد الحضور والغياب الرسمي للمرحلة الابتدائية</p>
+              </div>
+            </div>
+            <div class="text-left text-xs text-slate-600 space-y-1">
+              <div><strong>تاريخ استخراج التقرير:</strong> <span id="reportPrintDate">--</span></div>
+              <div id="reportCriteriaNotice" class="font-bold text-slate-800">--</div>
+            </div>
+          </div>
+
+          <div id="reportSummaryStats" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center py-2">
+            <!-- ديناميكي -->
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs border border-slate-200" id="reportResultTable">
+              <thead>
+                <tr class="bg-slate-100 text-slate-800 border-b border-slate-300">
+                  <th class="p-2.5 font-black border">#</th>
+                  <th class="p-2.5 font-black border">اسم الطالب</th>
+                  <th class="p-2.5 font-black border">المرحلة / الصف</th>
+                  <th class="p-2.5 font-black border">هاتف ولي الأمر</th>
+                  <th class="p-2.5 font-black border">أيام الحضور</th>
+                  <th class="p-2.5 font-black border">أيام الغياب</th>
+                  <th class="p-2.5 font-black border">نسبة الالتزام</th>
+                  <th class="p-2.5 font-black border">الحالة الأخيرة</th>
+                </tr>
+              </thead>
+              <tbody id="reportTableBody">
+                <tr>
+                  <td colspan="8" class="text-center py-6 text-slate-400">اضغط على زر "توليد وعرض التقرير" لعرض النتائج هنا.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pt-6 mt-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500 font-bold">
+            <span>إدارة شؤون الطلاب - معهد السرور التعليمي</span>
+            <span>توقيع الأستاذ المشرف: .............................</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- تبويب: إدارة الطلاب -->
+      <div id="tViewManageStudents" class="space-y-4 hidden">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm">
+          <h3 class="text-sm font-black text-slate-900 mb-3 flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+            <span>تسجيل وتنسيب طالب للمرحلة الابتدائية</span>
+          </h3>
+          <form id="addNewStudentForm" onsubmit="handleAddNewStudent(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">اسم الطالب الكامل</label>
+              <input type="text" id="newStudentName" required placeholder="أدخل اسم الطالب الرباعي" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">تنسيب الصف الابتدائي</label>
+              <select id="newStudentGrade" required class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                <option value="الأول الابتدائي">الأول الابتدائي</option>
+                <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                <option value="السادس الابتدائي">السادس الابتدائي</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">رقم هاتف ولي الأمر (واتساب)</label>
+              <input type="tel" id="newStudentPhone" required placeholder="0770XXXXXXX" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+            </div>
+            <div class="flex items-end">
+              <button type="submit" class="w-full bg-brand-900 hover:bg-brand-950 text-white py-2 rounded-xl text-xs font-black shadow-md transition-all">
+                + إضافة الطالب وتنسيبه
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <h3 class="text-sm font-black text-slate-900">سجل الطلاب المسجلين بالصفوف الابتدائية</h3>
+            <div class="w-full sm:w-64">
+              <input type="text" id="searchManageStudents" oninput="renderManageStudentsList()" placeholder="ابحث باسم الطالب أو الصف..." class="w-full px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            </div>
+          </div>
+
+          <div id="manageStudentsList" class="space-y-2">
+            <!-- ديناميكي -->
+          </div>
+        </div>
+      </div>
+
+      <!-- تبويب: إدارة المحاضرات المرئية -->
+      <div id="tViewManageLectures" class="space-y-4 hidden">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm">
+          <h3 class="text-sm font-black text-slate-900 mb-3 flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+            <span>نشر محاضرة مرئية جديدة</span>
+          </h3>
+          <form id="addNewLectureForm" onsubmit="handleAddNewLecture(event)" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">اسم المادة</label>
+                <input type="text" id="lecInputSubject" required placeholder="مثال: الرياضيات، قراءتي، العلوم" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">الصف الابتدائي</label>
+                <select id="lecInputGrade" required class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                  <option value="الأول الابتدائي">الأول الابتدائي</option>
+                  <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                  <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                  <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                  <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                  <option value="السادس الابتدائي">السادس الابتدائي</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">الفصل / الوحدة (اختياري)</label>
+                <input type="text" id="lecInputChapter" placeholder="مثال: الفصل الأول" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">عنوان المحاضرة</label>
+                <input type="text" id="lecInputTitle" required placeholder="أدخل عنوان المحاضرة" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">رابط فيديو YouTube (يدعم الروابط غير المدرجة Unlisted)</label>
+                <input type="url" id="lecInputVideoUrl" required placeholder="https://youtu.be/... أو https://www.youtube.com/watch?v=..." class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">رابط ملف PDF ملحق بالمحاضرة (اختياري)</label>
+                <input type="url" id="lecInputPdfUrl" placeholder="https://drive.google.com/..." class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+              </div>
+            </div>
+
+            <button type="submit" class="bg-brand-900 hover:bg-brand-950 text-white px-5 py-2 rounded-xl text-xs font-black shadow-md transition-all">
+              نشر المحاضرة للمرحلة الابتدائية
+            </button>
+          </form>
+        </div>
+
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm space-y-3">
+          <h3 class="text-sm font-black text-slate-900">المحاضرات المرئية المضافة</h3>
+          <div id="manageLecturesList" class="space-y-2">
+            <!-- ديناميكي -->
+          </div>
+        </div>
+      </div>
+
+      <!-- تبويب: إدارة ملفات PDF -->
+      <div id="tViewManagePdfs" class="space-y-4 hidden">
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm">
+          <h3 class="text-sm font-black text-slate-900 mb-3 flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-600"></span>
+            <span>إضافة ملزمة أو ملخص PDF جديد</span>
+          </h3>
+          <form id="addNewPdfForm" onsubmit="handleAddNewPdf(event)" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">عنوان الملف أو الملزمة</label>
+                <input type="text" id="pdfInputTitle" required placeholder="مثال: ملزمة القواعد الذهبية" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">اسم المادة</label>
+                <input type="text" id="pdfInputSubject" required placeholder="مثال: الرياضيات، العلوم" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">الصف الابتدائي</label>
+                <select id="pdfInputGrade" required class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white">
+                  <option value="الأول الابتدائي">الأول الابتدائي</option>
+                  <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                  <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                  <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                  <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                  <option value="السادس الابتدائي">السادس الابتدائي</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">الفصل (اختياري)</label>
+                <input type="text" id="pdfInputChapter" placeholder="مثال: الفصل الأول (اختياري)" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">رابط تحميل وعرض ملف PDF (Google Drive أو مباشر)</label>
+              <input type="url" id="pdfInputFileUrl" required placeholder="https://..." class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+            </div>
+
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl text-xs font-black shadow-md transition-all">
+              + حفظ وإتاحة الملزمة للطلاب
+            </button>
+          </form>
+        </div>
+
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm space-y-3">
+          <h3 class="text-sm font-black text-slate-900">مكتبة الملازم والملخصات الحالية</h3>
+          <div id="managePdfsList" class="space-y-2">
+            <!-- ديناميكي -->
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- الفوتر مع زر تسجيل دخول الأستاذ في الأسفل -->
+  <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 mt-12 py-6 px-4 no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-center sm:text-right">
+        <h4 class="font-black text-white text-sm">معهد السرور التعليمي للمرحلة الابتدائية</h4>
+        <p class="text-xs text-slate-400 mt-0.5">صرح تربوي تعليمي متكامل لغرس أسس النجاح والتفوق</p>
+      </div>
+
+      <div id="footerAuthButtonContainer">
+        <button onclick="openTeacherLoginModal()" class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 px-4 py-2 rounded-xl text-xs font-black shadow-md transition-transform active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          <span>تسجيل دخول الأستاذ والإدارة</span>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- نافذة تسجيل دخول الأستاذ (تم إخفاء أي تلميح توضيحي sr) -->
+  <div id="teacherLoginModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 sm:p-7 w-full max-w-sm shadow-2xl border border-slate-100">
+      <div class="text-center mb-5">
+        <div class="w-14 h-14 bg-brand-50 text-brand-900 rounded-2xl mx-auto flex items-center justify-center mb-2 font-black text-2xl border border-brand-100">
+          🔐
+        </div>
+        <h3 class="text-lg font-black text-slate-900">تسجيل دخول الأستاذ</h3>
+        <p class="text-xs text-slate-500">لوحة تحكم معهد السرور التعليمي</p>
+      </div>
+
+      <div id="loginErrorMsg" class="hidden mb-3 p-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-black text-center">
+        اسم المستخدم أو كلمة المرور غير صحيحة!
+      </div>
+
+      <form onsubmit="executeTeacherLogin(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">اسم المستخدم</label>
+          <!-- تم إزالة أي تلميح أو Placeholder يحوي sr -->
+          <input type="text" id="inputUsername" required placeholder="أدخل اسم المستخدم" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 font-bold" dir="ltr" autocomplete="off">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور</label>
+          <input type="password" id="inputPassword" required placeholder="••••••••" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 font-bold" dir="ltr" autocomplete="off">
+        </div>
+
+        <div class="flex items-center gap-2 pt-2">
+          <button type="button" onclick="closeTeacherLoginModal()" class="flex-1 py-2.5 rounded-xl text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors">
+            إلغاء
+          </button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl text-xs font-black text-white bg-brand-900 hover:bg-brand-950 transition-colors shadow-md">
+            دخول
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    // استيراد حزم Firebase الرسمية عبر CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    /* =========================================================================
+       إعدادات Firebase الخاصة بمشروع معهد السرور (تم ربطها بنجاح)
+       ========================================================================= */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDYFI30En_SFqNKAsmiYGN0pi-G0L_r3Yw",
+      authDomain: "sror-f309e.firebaseapp.com",
+      projectId: "sror-f309e",
+      storageBucket: "sror-f309e.firebasestorage.app",
+      messagingSenderId: "239567253727",
+      appId: "1:239567253727:web:b404432c59d615d253f96a",
+      measurementId: "G-77VKS30H0T"
+    };
+
+    let app = null;
+    let db = null;
+    let auth = null;
+    let isFirebaseActive = false;
+
+    // تحديث علامة مؤشر حالة الربط بقاعدة البيانات
+    function updateFirebaseStatusBadge(status) {
+      const badge = document.getElementById('firebaseStatusBadge');
+      const dot = document.getElementById('firebaseStatusDot');
+      const txt = document.getElementById('firebaseStatusText');
+      if (!badge || !dot || !txt) return;
+
+      if (status === 'connected') {
+        badge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors bg-emerald-50 text-emerald-800 border-emerald-200";
+        dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+        txt.textContent = "قاعدة البيانات: متصل سحابياً (Firebase ✓)";
+      } else if (status === 'connecting') {
+        badge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors bg-sky-50 text-sky-800 border-sky-200";
+        dot.className = "w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse";
+        txt.textContent = "جاري الاتصال بـ Firebase...";
+      } else {
+        badge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors bg-amber-50 text-amber-800 border-amber-200";
+        dot.className = "w-2.5 h-2.5 rounded-full bg-amber-500";
+        txt.textContent = "قاعدة البيانات: محلي (Offline / التخزين المؤقت)";
+      }
+    }
+
+    // تهيئة Firebase والاشتراك الحي (Realtime Sync)
+    async function initFirebaseConnection() {
+      try {
+        updateFirebaseStatusBadge('connecting');
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+
+        // تسجيل الدخول بشكل مجهول للوصول لقاعدة البيانات بأمان
+        await signInAnonymously(auth);
+
+        // مسار الوثيقة العامة لمعهد السرور
+        const publicDocRef = doc(db, 'artifacts', 'soroor-institute-app', 'public', 'data', 'institute_state', 'current');
+        
+        onSnapshot(publicDocRef, (docSnap) => {
+          if (docSnap.exists()) {
+            const cloudData = docSnap.data();
+            if (cloudData.students && Array.isArray(cloudData.students)) window.students = cloudData.students;
+            if (cloudData.lectures && Array.isArray(cloudData.lectures)) window.lectures = cloudData.lectures;
+            if (cloudData.pdfDocs && Array.isArray(cloudData.pdfDocs)) window.pdfDocs = cloudData.pdfDocs;
+            if (cloudData.attendanceLog && Array.isArray(cloudData.attendanceLog)) window.attendanceLog = cloudData.attendanceLog;
+
+            localStorage.setItem('soroor_elem_students', JSON.stringify(window.students));
+            localStorage.setItem('soroor_elem_lectures', JSON.stringify(window.lectures));
+            localStorage.setItem('soroor_elem_pdfs', JSON.stringify(window.pdfDocs));
+            localStorage.setItem('soroor_elem_att_log', JSON.stringify(window.attendanceLog));
+
+            // تحديث شاشات العرض فورياً
+            if (typeof window.renderDailyAttendance === 'function') window.renderDailyAttendance();
+            if (typeof window.renderManageStudentsList === 'function') window.renderManageStudentsList();
+            if (typeof window.renderManageLecturesList === 'function') window.renderManageLecturesList();
+            if (typeof window.renderManagePdfsList === 'function') window.renderManagePdfsList();
+            if (typeof window.renderStudentLectures === 'function') window.renderStudentLectures();
+            if (typeof window.renderStudentPdfs === 'function') window.renderStudentPdfs();
+          } else {
+            // حفظ البيانات الأولية في السحابة إذا كانت الوثيقة جديدة
+            window.syncAndSaveData();
+          }
+          isFirebaseActive = true;
+          updateFirebaseStatusBadge('connected');
+        }, (err) => {
+          console.warn("تنبيه اتصال Firestore (النظام مستمر بالعمل محلياً):", err);
+          updateFirebaseStatusBadge('offline');
+        });
+
+      } catch (err) {
+        console.warn("خطأ في الاتصال بالسحابة (يعمل النظام محلياً):", err);
+        updateFirebaseStatusBadge('offline');
+      }
+    }
+
+    // دالة حفظ البيانات ومزامنتها سحابياً
+    window.syncAndSaveData = async function() {
+      // 1. الحفظ المحلي السريع
+      localStorage.setItem('soroor_elem_students', JSON.stringify(window.students));
+      localStorage.setItem('soroor_elem_lectures', JSON.stringify(window.lectures));
+      localStorage.setItem('soroor_elem_pdfs', JSON.stringify(window.pdfDocs));
+      localStorage.setItem('soroor_elem_att_log', JSON.stringify(window.attendanceLog));
+
+      // 2. الرفع المباشر لـ Firebase Firestore
+      if (isFirebaseActive && db) {
+        try {
+          const publicDocRef = doc(db, 'artifacts', 'soroor-institute-app', 'public', 'data', 'institute_state', 'current');
+          await setDoc(publicDocRef, {
+            students: window.students,
+            lectures: window.lectures,
+            pdfDocs: window.pdfDocs,
+            attendanceLog: window.attendanceLog,
+            lastUpdated: new Date().toISOString()
+          }, { merge: true });
+        } catch (error) {
+          console.error("خطأ أثناء مزامنة Firebase السحابية:", error);
+        }
+      }
+    };
+
+    // تشغيل الاتصال المباشر
+    initFirebaseConnection();
+  </script>
+
+  <script>
+    /* ==========================================
+       البيانات الافتراضية للمرحلة الابتدائية
+       ========================================== */
+    const INITIAL_STUDENTS = [
+      { id: 1, name: "علي حسين كاظم", grade: "الأول الابتدائي", phone: "07701112233" },
+      { id: 2, name: "زينب جاسم محمد", grade: "الأول الابتدائي", phone: "07702223344" },
+      { id: 3, name: "حيدر أحمد رضا", grade: "الثاني الابتدائي", phone: "07803334455" },
+      { id: 4, name: "مريم صادق فاضل", grade: "الثالث الابتدائي", phone: "07804445566" },
+      { id: 5, name: "عبد الله كرار سامي", grade: "الرابع الابتدائي", phone: "07715556677" },
+      { id: 6, name: "فاطمة عمار باقر", grade: "الخامس الابتدائي", phone: "07716667788" },
+      { id: 7, name: "محمد وسام فاروق", grade: "السادس الابتدائي", phone: "07727778899" },
+      { id: 8, name: "نور الزهراء سلام", grade: "السادس الابتدائي", phone: "07728889900" }
+    ];
+
+    const INITIAL_LECTURES = [
+      {
+        id: 1,
+        subject: "الرياضيات",
+        grade: "السادس الابتدائي",
+        chapter: "الفصل الأول: الأعداد الصحيحة",
+        title: "المحاضرة 1: الأعداد الصحيحة وتمثيلها على مستقيم الأعداد",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        pdfUrl: "https://example.com/math-grade6.pdf"
+      },
+      {
+        id: 2,
+        subject: "قراءتي",
+        grade: "الأول الابتدائي",
+        chapter: "التهجئة الأساسية",
+        title: "المحاضرة 1: درس (دادا) وتجريد حرف الدال والراء",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        pdfUrl: ""
+      },
+      {
+        id: 3,
+        subject: "العلوم",
+        grade: "الخامس الابتدائي",
+        chapter: "الوحدة الثانية: صحة الإنسان",
+        title: "المحاضرة 1: الجهاز الهضمي ووظائفه",
+        videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        pdfUrl: "https://example.com/science-grade5.pdf"
+      }
+    ];
+
+    const INITIAL_PDFS = [
+      {
+        id: 1,
+        title: "ملزمة الرياضيات الشاملة والوزارية",
+        subject: "الرياضيات",
+        grade: "السادس الابتدائي",
+        chapter: "الفصل الأول والثاني",
+        fileUrl: "https://example.com/math-grade6-booklet.pdf"
+      },
+      {
+        id: 2,
+        title: "كراسة التأسيس والقراءة السريعة",
+        subject: "قراءتي",
+        grade: "الأول الابتدائي",
+        chapter: "الكورس التأسيسي",
+        fileUrl: "https://example.com/reading-grade1.pdf"
+      },
+      {
+        id: 3,
+        title: "ملخص مادة العلوم المصور",
+        subject: "العلوم",
+        grade: "الرابع الابتدائي",
+        chapter: "الفصل الثالث",
+        fileUrl: "https://example.com/science-grade4.pdf"
+      }
+    ];
+
+    function getTodayDateString() {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    const todayStr = getTodayDateString();
+    const INITIAL_ATTENDANCE_LOG = [
+      { studentId: 1, date: todayStr, status: 'present' },
+      { studentId: 2, date: todayStr, status: 'absent' },
+      { studentId: 3, date: todayStr, status: 'present' },
+      { studentId: 7, date: todayStr, status: 'present' },
+      { studentId: 8, date: todayStr, status: 'absent' }
+    ];
+
+    window.students = JSON.parse(localStorage.getItem('soroor_elem_students')) || INITIAL_STUDENTS;
+    window.lectures = JSON.parse(localStorage.getItem('soroor_elem_lectures')) || INITIAL_LECTURES;
+    window.pdfDocs = JSON.parse(localStorage.getItem('soroor_elem_pdfs')) || INITIAL_PDFS;
+    window.attendanceLog = JSON.parse(localStorage.getItem('soroor_elem_att_log')) || INITIAL_ATTENDANCE_LOG;
+
+    let isTeacherLoggedIn = false;
+    let currentDailyAttGrade = 'الأول الابتدائي';
+    let currentStudentLecFilter = 'all';
+    let currentStudentPdfFilter = 'all';
+
+    function triggerSave() {
+      if (typeof window.syncAndSaveData === 'function') {
+        window.syncAndSaveData();
+      } else {
+        localStorage.setItem('soroor_elem_students', JSON.stringify(window.students));
+        localStorage.setItem('soroor_elem_lectures', JSON.stringify(window.lectures));
+        localStorage.setItem('soroor_elem_pdfs', JSON.stringify(window.pdfDocs));
+        localStorage.setItem('soroor_elem_att_log', JSON.stringify(window.attendanceLog));
+      }
+    }
+
+    function convertYouTubeUrl(url) {
+      if (!url) return '';
+      let videoId = '';
+      if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
+      } else if (url.includes('youtube.com/watch')) {
+        const urlParams = new URLSearchParams(new URL(url).search);
+        videoId = urlParams.get('v');
+      } else if (url.includes('youtube.com/embed/')) {
+        return url;
+      }
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+    }
+
+    function cleanWhatsAppPhone(phone) {
+      let cleaned = (phone || '').replace(/[^0-9]/g, '');
+      if (cleaned.startsWith('0')) {
+        cleaned = '964' + cleaned.substring(1);
+      }
+      return cleaned;
+    }
+
+    /* ==========================================
+       إدارة تسجيل الدخول للأستاذ (sr / 9900)
+       ========================================== */
+    window.openTeacherLoginModal = function() {
+      document.getElementById('teacherLoginModal').classList.remove('hidden');
+      document.getElementById('loginErrorMsg').classList.add('hidden');
+      document.getElementById('inputUsername').value = '';
+      document.getElementById('inputPassword').value = '';
+    };
+
+    window.closeTeacherLoginModal = function() {
+      document.getElementById('teacherLoginModal').classList.add('hidden');
+    };
+
+    window.executeTeacherLogin = function(e) {
+      e.preventDefault();
+      const u = document.getElementById('inputUsername').value.trim();
+      const p = document.getElementById('inputPassword').value.trim();
+
+      // التحقق من بيانات الدخول: sr / 9900
+      if (u === 'sr' && p === '9900') {
+        isTeacherLoggedIn = true;
+        closeTeacherLoginModal();
+        document.getElementById('inputUsername').value = '';
+        document.getElementById('inputPassword').value = '';
+        refreshUIVisibility();
+      } else {
+        document.getElementById('loginErrorMsg').classList.remove('hidden');
+      }
+    };
+
+    window.performTeacherLogout = function() {
+      isTeacherLoggedIn = false;
+      refreshUIVisibility();
+    };
+
+    function refreshUIVisibility() {
+      const studentPortal = document.getElementById('studentPortalView');
+      const teacherPortal = document.getElementById('teacherPortalView');
+      const sessionBadge = document.getElementById('teacherSessionBadge');
+      const footerAuthBtn = document.getElementById('footerAuthButtonContainer');
+
+      if (isTeacherLoggedIn) {
+        studentPortal.classList.add('hidden');
+        teacherPortal.classList.remove('hidden');
+        sessionBadge.classList.remove('hidden');
+        footerAuthBtn.innerHTML = `
+          <button onclick="performTeacherLogout()" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-black shadow-md transition-transform active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            <span>تسجيل خروج الأستاذ</span>
+          </button>
+        `;
+        renderDailyAttendance();
+        renderManageStudentsList();
+        renderManageLecturesList();
+        renderManagePdfsList();
+      } else {
+        teacherPortal.classList.add('hidden');
+        studentPortal.classList.remove('hidden');
+        sessionBadge.classList.add('hidden');
+        footerAuthBtn.innerHTML = `
+          <button onclick="openTeacherLoginModal()" class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 px-4 py-2 rounded-xl text-xs font-black shadow-md transition-transform active:scale-95">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span>تسجيل دخول الأستاذ والإدارة</span>
+          </button>
+        `;
+        renderStudentLectures();
+        renderStudentPdfs();
+      }
+    }
+
+    /* ==========================================
+       واجهة الطالب: تبديل وفلترة
+       ========================================== */
+    window.toggleStudentSection = function(type) {
+      const lecBtn = document.getElementById('tabStudentLecturesBtn');
+      const pdfBtn = document.getElementById('tabStudentPdfsBtn');
+      const lecCont = document.getElementById('studentLecturesContainer');
+      const pdfCont = document.getElementById('studentPdfsContainer');
+
+      if (type === 'lectures') {
+        lecBtn.className = "flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-center transition-all bg-brand-900 text-white shadow-sm flex items-center justify-center gap-2";
+        pdfBtn.className = "flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-center transition-all text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-2";
+        lecCont.classList.remove('hidden');
+        pdfCont.classList.add('hidden');
+      } else {
+        pdfBtn.className = "flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-center transition-all bg-brand-900 text-white shadow-sm flex items-center justify-center gap-2";
+        lecBtn.className = "flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-center transition-all text-slate-600 hover:bg-slate-100 flex items-center justify-center gap-2";
+        pdfCont.classList.remove('hidden');
+        lecCont.classList.add('hidden');
+      }
+    };
+
+    window.setStudentLecGradeFilter = function(grade) {
+      currentStudentLecFilter = grade;
+      document.querySelectorAll('.student-lec-filter').forEach(btn => {
+        if (btn.getAttribute('data-grade') === grade) {
+          btn.className = "student-lec-filter active px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-brand-900 text-white border-brand-900 shadow-sm";
+        } else {
+          btn.className = "student-lec-filter px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-slate-100 text-slate-700 border-slate-200";
+        }
+      });
+      renderStudentLectures();
+    };
+
+    window.setStudentPdfGradeFilter = function(grade) {
+      currentStudentPdfFilter = grade;
+      document.querySelectorAll('.student-pdf-filter').forEach(btn => {
+        if (btn.getAttribute('data-grade') === grade) {
+          btn.className = "student-pdf-filter active px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap border transition-all bg-brand-900 text-white border-brand-900 shadow-sm";
+        } else {
+          btn.className = "student-pdf-filter px-3.5 py-1.5 rounded-xl text-xs font-bold border whitespace-nowrap transition-all bg-slate-100 text-slate-700 border-slate-200";
+        }
+      });
+      renderStudentPdfs();
+    };
+
+    window.renderStudentLectures = function() {
+      const grid = document.getElementById('studentLecturesGrid');
+      const notice = document.getElementById('studentLecCountNotice');
+      const search = (document.getElementById('studentLecSearch')?.value || '').toLowerCase().trim();
+
+      const filtered = window.lectures.filter(l => {
+        const matchesGrade = currentStudentLecFilter === 'all' || l.grade === currentStudentLecFilter;
+        const matchesSearch = !search ||
+          l.subject.toLowerCase().includes(search) ||
+          l.title.toLowerCase().includes(search) ||
+          (l.chapter && l.chapter.toLowerCase().includes(search));
+        return matchesGrade && matchesSearch;
+      });
+
+      if (notice) notice.textContent = `المحاضرات المعروضة: ${filtered.length} محاضرة`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-slate-200 p-6">
+            <p class="text-sm font-bold text-slate-500">لا توجد محاضرات منشورة تطابق هذا الاختيار حالياً.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(l => `
+        <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+          <div>
+            <div class="video-container">
+              <iframe src="${l.videoUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="p-4 space-y-2">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-sky-100 text-sky-900">${l.grade}</span>
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-950">${l.subject}</span>
+                ${l.chapter ? `<span class="text-[11px] font-semibold text-slate-500">${l.chapter}</span>` : ''}
+              </div>
+              <h3 class="text-xs sm:text-sm font-black text-slate-900 leading-snug">${l.title}</h3>
+            </div>
+          </div>
+          <div class="p-4 pt-0">
+            ${l.pdfUrl ? `
+              <a href="${l.pdfUrl}" target="_blank" class="w-full py-2 px-3 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-bold flex items-center justify-center gap-2 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <span>تحميل ملخص المحاضرة (PDF)</span>
+              </a>
+            ` : `
+              <span class="block text-center text-[11px] text-slate-400 py-1 font-semibold">لا يوجد ملخص PDF ملحق</span>
+            `}
+          </div>
+        </div>
+      `).join('');
+    };
+
+    window.renderStudentPdfs = function() {
+      const grid = document.getElementById('studentPdfsGrid');
+      const notice = document.getElementById('studentPdfCountNotice');
+      const search = (document.getElementById('studentPdfSearch')?.value || '').toLowerCase().trim();
+
+      const filtered = window.pdfDocs.filter(p => {
+        const matchesGrade = currentStudentPdfFilter === 'all' || p.grade === currentStudentPdfFilter;
+        const matchesSearch = !search ||
+          p.title.toLowerCase().includes(search) ||
+          p.subject.toLowerCase().includes(search) ||
+          (p.chapter && p.chapter.toLowerCase().includes(search));
+        return matchesGrade && matchesSearch;
+      });
+
+      if (notice) notice.textContent = `الملازم المعروضة: ${filtered.length} ملف`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center bg-white rounded-2xl border border-slate-200 p-6">
+            <p class="text-sm font-bold text-slate-500">لا توجد ملازم أو ملفات PDF مطابقة حالياً.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+          <div class="space-y-2.5">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center font-black text-xs shadow-inner">
+                PDF
+              </div>
+              <div>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-sky-100 text-sky-900">${p.grade}</span>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 mr-1">${p.subject}</span>
+              </div>
+            </div>
+            <h4 class="text-xs sm:text-sm font-black text-slate-900 leading-snug">${p.title}</h4>
+            ${p.chapter ? `<p class="text-xs text-slate-500 font-semibold">${p.chapter}</p>` : ''}
+          </div>
+          <a href="${p.fileUrl}" target="_blank" class="mt-4 w-full py-2 px-3 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-black flex items-center justify-center gap-2 transition-colors shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>فتح وتحميل الملزمة</span>
+          </a>
+        </div>
+      `).join('');
+    };
+
+    /* ==========================================
+       لوحة تحكم الأستاذ: التنقل بين التبويبات
+       ========================================== */
+    window.switchTeacherTab = function(tabKey) {
+      const views = {
+        dailyAttendance: document.getElementById('tViewDailyAttendance'),
+        attendanceReports: document.getElementById('tViewAttendanceReports'),
+        manageStudents: document.getElementById('tViewManageStudents'),
+        manageLectures: document.getElementById('tViewManageLectures'),
+        managePdfs: document.getElementById('tViewManagePdfs')
+      };
+
+      const buttons = {
+        dailyAttendance: document.getElementById('tNavAttendance'),
+        attendanceReports: document.getElementById('tNavReports'),
+        manageStudents: document.getElementById('tNavStudents'),
+        manageLectures: document.getElementById('tNavLectures'),
+        managePdfs: document.getElementById('tNavPdfs')
+      };
+
+      Object.keys(views).forEach(k => {
+        if (k === tabKey) {
+          views[k].classList.remove('hidden');
+          buttons[k].className = "t-nav-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-black whitespace-nowrap bg-brand-900 text-white transition-all shadow-sm flex items-center gap-2";
+        } else {
+          views[k].classList.add('hidden');
+          buttons[k].className = "t-nav-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-black whitespace-nowrap text-slate-600 hover:bg-slate-100 transition-all flex items-center gap-2";
+        }
+      });
+
+      if (tabKey === 'dailyAttendance') renderDailyAttendance();
+      if (tabKey === 'attendanceReports') generateAttendanceReport();
+      if (tabKey === 'manageStudents') renderManageStudentsList();
+      if (tabKey === 'manageLectures') renderManageLecturesList();
+      if (tabKey === 'managePdfs') renderManagePdfsList();
+    };
+
+    /* ==========================================
+       تسجيل الحضور اليومي الاحترافي والمؤرخ
+       ========================================== */
+    window.setDailyAttGrade = function(grade) {
+      currentDailyAttGrade = grade;
+      document.querySelectorAll('.daily-att-grade-btn').forEach(btn => {
+        if (btn.getAttribute('data-grade') === grade) {
+          btn.className = "daily-att-grade-btn active px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-brand-900 text-white shadow-sm";
+        } else {
+          btn.className = "daily-att-grade-btn px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all bg-slate-100 text-slate-700 hover:bg-slate-200";
+        }
+      });
+      renderDailyAttendance();
+    };
+
+    window.handleAttendanceDateChange = function() {
+      renderDailyAttendance();
+    };
+
+    function getSelectedAttendanceDate() {
+      const picker = document.getElementById('attendanceDatePicker');
+      return picker ? picker.value : getTodayDateString();
+    }
+
+    function getStudentAttendanceStatus(studentId, dateStr) {
+      const record = window.attendanceLog.find(log => log.studentId === studentId && log.date === dateStr);
+      return record ? record.status : 'absent';
+    }
+
+    window.toggleStudentDailyStatus = function(studentId) {
+      const curDate = getSelectedAttendanceDate();
+      const existingIndex = window.attendanceLog.findIndex(log => log.studentId === studentId && log.date === curDate);
+
+      if (existingIndex > -1) {
+        window.attendanceLog[existingIndex].status = window.attendanceLog[existingIndex].status === 'present' ? 'absent' : 'present';
+      } else {
+        window.attendanceLog.push({
+          studentId: studentId,
+          date: curDate,
+          status: 'present'
+        });
+      }
+      triggerSave();
+      renderDailyAttendance();
+    };
+
+    window.markAllGradePresentToday = function() {
+      const curDate = getSelectedAttendanceDate();
+      const gradeStudents = window.students.filter(s => s.grade === currentDailyAttGrade);
+
+      if (gradeStudents.length === 0) return;
+
+      gradeStudents.forEach(st => {
+        const idx = window.attendanceLog.findIndex(log => log.studentId === st.id && log.date === curDate);
+        if (idx > -1) {
+          window.attendanceLog[idx].status = 'present';
+        } else {
+          window.attendanceLog.push({ studentId: st.id, date: curDate, status: 'present' });
+        }
+      });
+
+      triggerSave();
+      renderDailyAttendance();
+    };
+
+    window.renderDailyAttendance = function() {
+      const container = document.getElementById('dailyAttendanceListContainer');
+      if (!container) return;
+
+      const curDate = getSelectedAttendanceDate();
+      const gradeStudents = window.students.filter(s => s.grade === currentDailyAttGrade);
+
+      const total = gradeStudents.length;
+      let presentCount = 0;
+      gradeStudents.forEach(st => {
+        if (getStudentAttendanceStatus(st.id, curDate) === 'present') presentCount++;
+      });
+      const absentCount = total - presentCount;
+      const rate = total > 0 ? Math.round((presentCount / total) * 100) : 0;
+
+      const stTot = document.getElementById('statDailyTotal');
+      const stPres = document.getElementById('statDailyPresent');
+      const stAbs = document.getElementById('statDailyAbsent');
+      const stRate = document.getElementById('statDailyRate');
+
+      if (stTot) stTot.textContent = total;
+      if (stPres) stPres.textContent = presentCount;
+      if (stAbs) stAbs.textContent = absentCount;
+      if (stRate) stRate.textContent = `${rate}%`;
+
+      if (gradeStudents.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center bg-white rounded-2xl border border-slate-200">
+            <p class="text-xs sm:text-sm font-bold text-slate-500">لا يوجد طلاب مسجلين في مرحلة (${currentDailyAttGrade}) حتى الآن.</p>
+            <p class="text-xs text-slate-400 mt-1">أضف طلاباً من تبويب "إدارة الطلاب والتنسيب".</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = gradeStudents.map((s, idx) => {
+        const isPresent = getStudentAttendanceStatus(s.id, curDate) === 'present';
+        const cleanPhone = cleanWhatsAppPhone(s.phone);
+        const statusText = isPresent ? 'حاضر اليوم' : 'غائب اليوم';
+        const waMsg = encodeURIComponent(`السلام عليكم ولي أمر التلميذ/ة (${s.name})،\nنود إعلامكم بأن التلميذ مسجل [${statusText}] في معهد السرور التعليمي - صف (${s.grade}) لتاريخ اليوم: ${curDate}.`);
+        const waLink = `https://wa.me/${cleanPhone}?text=${waMsg}`;
+
+        return `
+          <div class="bg-white border ${isPresent ? 'border-emerald-200 bg-emerald-50/10' : 'border-red-200 bg-red-50/10'} rounded-2xl p-3.5 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-xl ${isPresent ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'} flex items-center justify-center font-black text-xs">
+                ${idx + 1}
+              </span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="text-xs sm:text-sm font-black text-slate-900">${s.name}</h4>
+                  <span class="text-[10px] font-black px-2 py-0.5 rounded-full ${isPresent ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">
+                    ${isPresent ? 'حاضر ✓' : 'غائب ✗'}
+                  </span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">الصف: ${s.grade} | هاتف ولي الأمر: <span dir="ltr">${s.phone}</span></p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 flex-wrap self-end sm:self-auto">
+              <a href="${waLink}" target="_blank" class="px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black flex items-center gap-1.5 transition-colors shadow-sm">
+                <span>💬 إشعار واتساب</span>
+              </a>
+
+              <button onclick="toggleStudentDailyStatus(${s.id})" class="px-3.5 py-1.5 rounded-xl ${isPresent ? 'bg-amber-100 text-amber-900 hover:bg-amber-200' : 'bg-brand-900 text-white hover:bg-brand-950'} text-xs font-black transition-all">
+                ${isPresent ? 'تحويل إلى غائب' : 'تسجيل حاضر'}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    };
+
+    /* ==========================================
+       تقارير الحضور والغياب مع خيارات الطباعة وتصدير PDF
+       ========================================== */
+    window.toggleReportScopeInputs = function() {
+      const type = document.getElementById('reportScopeType').value;
+      const singleWrap = document.getElementById('reportSingleDateWrapper');
+      const fromWrap = document.getElementById('reportRangeDateFromWrapper');
+      const toWrap = document.getElementById('reportRangeDateToWrapper');
+
+      if (type === 'single') {
+        singleWrap.classList.remove('hidden');
+        fromWrap.classList.add('hidden');
+        toWrap.classList.add('hidden');
+      } else {
+        singleWrap.classList.add('hidden');
+        fromWrap.classList.remove('hidden');
+        toWrap.classList.remove('hidden');
+      }
+    };
+
+    window.generateAttendanceReport = function() {
+      const scopeType = document.getElementById('reportScopeType').value;
+      const gradeFilter = document.getElementById('reportGradeFilter').value;
+      const tbody = document.getElementById('reportTableBody');
+      const summaryStats = document.getElementById('reportSummaryStats');
+      const criteriaNotice = document.getElementById('reportCriteriaNotice');
+      const printDateEl = document.getElementById('reportPrintDate');
+
+      if (printDateEl) printDateEl.textContent = getTodayDateString();
+
+      let targetStudents = window.students;
+      if (gradeFilter !== 'all') {
+        targetStudents = targetStudents.filter(s => s.grade === gradeFilter);
+      }
+
+      let dateFilterFn;
+      let criteriaText = '';
+
+      if (scopeType === 'single') {
+        const sDate = document.getElementById('reportSingleDate').value || getTodayDateString();
+        dateFilterFn = (d) => d === sDate;
+        criteriaText = `تقرير يوم: ${sDate} | الصف: ${gradeFilter === 'all' ? 'جميع الصفوف الابتدائية' : gradeFilter}`;
+      } else {
+        const fDate = document.getElementById('reportDateFrom').value || getTodayDateString();
+        const tDate = document.getElementById('reportDateTo').value || getTodayDateString();
+        dateFilterFn = (d) => d >= fDate && d <= tDate;
+        criteriaText = `تقرير الفترة من: ${fDate} إلى: ${tDate} | الصف: ${gradeFilter === 'all' ? 'جميع الصفوف الابتدائية' : gradeFilter}`;
+      }
+
+      if (criteriaNotice) criteriaNotice.textContent = criteriaText;
+
+      if (targetStudents.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-400">لا يوجد طلاب مسجلين في هذا الصف.</td></tr>`;
+        summaryStats.innerHTML = '';
+        return;
+      }
+
+      let totalPresentDaysAcrossAll = 0;
+      let totalAbsentDaysAcrossAll = 0;
+
+      const reportRows = targetStudents.map((st, idx) => {
+        const studentLogs = window.attendanceLog.filter(log => log.studentId === st.id && dateFilterFn(log.date));
+        
+        let presentDays = 0;
+        let absentDays = 0;
+
+        if (scopeType === 'single') {
+          const sDate = document.getElementById('reportSingleDate').value || getTodayDateString();
+          const record = window.attendanceLog.find(log => log.studentId === st.id && log.date === sDate);
+          if (record && record.status === 'present') {
+            presentDays = 1;
+          } else {
+            absentDays = 1;
+          }
+        } else {
+          presentDays = studentLogs.filter(l => l.status === 'present').length;
+          absentDays = studentLogs.filter(l => l.status === 'absent').length;
+        }
+
+        const totalTracked = presentDays + absentDays;
+        const commitmentRate = totalTracked > 0 ? Math.round((presentDays / totalTracked) * 100) : 0;
+        const lastStatus = presentDays >= absentDays ? 'ملتزم' : 'يحتاج متابعة';
+
+        totalPresentDaysAcrossAll += presentDays;
+        totalAbsentDaysAcrossAll += absentDays;
+
+        return `
+          <tr class="border-b border-slate-200 hover:bg-slate-50">
+            <td class="p-2 border text-center font-bold">${idx + 1}</td>
+            <td class="p-2 border font-black text-slate-900">${st.name}</td>
+            <td class="p-2 border font-bold text-slate-700">${st.grade}</td>
+            <td class="p-2 border text-slate-600" dir="ltr">${st.phone}</td>
+            <td class="p-2 border font-black text-emerald-700 text-center">${presentDays}</td>
+            <td class="p-2 border font-black text-red-700 text-center">${absentDays}</td>
+            <td class="p-2 border font-bold text-center">${commitmentRate}%</td>
+            <td class="p-2 border text-center">
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-black ${commitmentRate >= 50 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">
+                ${lastStatus}
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.innerHTML = reportRows;
+
+      const totalStudentsReported = targetStudents.length;
+      summaryStats.innerHTML = `
+        <div class="bg-slate-50 p-2 rounded-xl border border-slate-200">
+          <div class="text-[10px] text-slate-500 font-bold">عدد الطلاب بالتقرير</div>
+          <div class="text-base font-black text-slate-800">${totalStudentsReported}</div>
+        </div>
+        <div class="bg-emerald-50 p-2 rounded-xl border border-emerald-100">
+          <div class="text-[10px] text-emerald-700 font-bold">إجمالي أيام الحضور</div>
+          <div class="text-base font-black text-emerald-800">${totalPresentDaysAcrossAll}</div>
+        </div>
+        <div class="bg-red-50 p-2 rounded-xl border border-red-100">
+          <div class="text-[10px] text-red-700 font-bold">إجمالي أيام الغياب</div>
+          <div class="text-base font-black text-red-800">${totalAbsentDaysAcrossAll}</div>
+        </div>
+        <div class="bg-blue-50 p-2 rounded-xl border border-blue-100">
+          <div class="text-[10px] text-blue-700 font-bold">معدل الانضباط العام</div>
+          <div class="text-base font-black text-blue-800">
+            ${(totalPresentDaysAcrossAll + totalAbsentDaysAcrossAll) > 0 ? Math.round((totalPresentDaysAcrossAll / (totalPresentDaysAcrossAll + totalAbsentDaysAcrossAll)) * 100) : 0}%
+          </div>
+        </div>
+      `;
+    };
+
+    /* ==========================================
+       إدارة الطلاب وتنسيبهم للمراحل الابتدائية
+       ========================================== */
+    window.handleAddNewStudent = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('newStudentName').value.trim();
+      const grade = document.getElementById('newStudentGrade').value;
+      const phone = document.getElementById('newStudentPhone').value.trim();
+
+      const newStudent = {
+        id: Date.now(),
+        name,
+        grade,
+        phone
+      };
+
+      window.students.push(newStudent);
+
+      window.attendanceLog.push({
+        studentId: newStudent.id,
+        date: getSelectedAttendanceDate(),
+        status: 'present'
+      });
+
+      triggerSave();
+      document.getElementById('addNewStudentForm').reset();
+      renderManageStudentsList();
+      renderDailyAttendance();
+    };
+
+    window.removeStudent = function(studentId) {
+      window.students = window.students.filter(s => s.id !== studentId);
+      window.attendanceLog = window.attendanceLog.filter(l => l.studentId !== studentId);
+      triggerSave();
+      renderManageStudentsList();
+      renderDailyAttendance();
+    };
+
+    window.renderManageStudentsList = function() {
+      const container = document.getElementById('manageStudentsList');
+      if (!container) return;
+      const search = (document.getElementById('searchManageStudents')?.value || '').toLowerCase().trim();
+
+      const filtered = window.students.filter(s => !search || s.name.toLowerCase().includes(search) || s.grade.includes(search));
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center font-bold">لا يوجد طلاب مسجلين يطابقون هذا البحث.</p>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map((s, idx) => {
+        const cleanPhone = cleanWhatsAppPhone(s.phone);
+        const waLink = `https://wa.me/${cleanPhone}`;
+
+        return `
+          <div class="bg-slate-50 border border-slate-200/90 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+            <div class="flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-lg bg-brand-100 text-brand-900 flex items-center justify-center font-black text-[11px]">${idx + 1}</span>
+              <div>
+                <span class="font-black text-slate-900">${s.name}</span>
+                <span class="mx-1 text-slate-300">|</span>
+                <span class="font-bold text-sky-800 bg-sky-50 px-2 py-0.5 rounded-md">${s.grade}</span>
+                <span class="mx-1 text-slate-300">|</span>
+                <span class="text-slate-500 font-semibold" dir="ltr">${s.phone}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto">
+              <a href="${waLink}" target="_blank" class="px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[11px] flex items-center gap-1 shadow-sm">
+                <span>واتساب</span>
+              </a>
+              <button onclick="removeStudent(${s.id})" class="px-3 py-1 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 font-bold text-[11px] transition-colors">
+                حذف الطالب
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    };
+
+    /* ==========================================
+       إدارة المحاضرات المرئية (YouTube)
+       ========================================== */
+    window.handleAddNewLecture = function(e) {
+      e.preventDefault();
+      const subject = document.getElementById('lecInputSubject').value.trim();
+      const grade = document.getElementById('lecInputGrade').value;
+      const chapter = document.getElementById('lecInputChapter').value.trim();
+      const title = document.getElementById('lecInputTitle').value.trim();
+      const videoUrl = convertYouTubeUrl(document.getElementById('lecInputVideoUrl').value.trim());
+      const pdfUrl = document.getElementById('lecInputPdfUrl').value.trim();
+
+      const newLec = {
+        id: Date.now(),
+        subject,
+        grade,
+        chapter,
+        title,
+        videoUrl,
+        pdfUrl
+      };
+
+      window.lectures.unshift(newLec);
+      triggerSave();
+      document.getElementById('addNewLectureForm').reset();
+      renderManageLecturesList();
+      renderStudentLectures();
+    };
+
+    window.removeLecture = function(id) {
+      window.lectures = window.lectures.filter(l => l.id !== id);
+      triggerSave();
+      renderManageLecturesList();
+      renderStudentLectures();
+    };
+
+    window.renderManageLecturesList = function() {
+      const container = document.getElementById('manageLecturesList');
+      if (!container) return;
+      if (window.lectures.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 py-3 text-center font-bold">لا توجد محاضرات منشورة حالياً.</p>`;
+        return;
+      }
+
+      container.innerHTML = window.lectures.map(l => `
+        <div class="bg-slate-50 border border-slate-200/90 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-black text-slate-900">${l.title}</span>
+              <span class="bg-sky-100 text-sky-900 font-bold px-2 py-0.5 rounded text-[10px]">${l.grade}</span>
+              <span class="bg-amber-100 text-amber-950 font-bold px-2 py-0.5 rounded text-[10px]">${l.subject}</span>
+            </div>
+            ${l.chapter ? `<p class="text-slate-500 text-[11px] mt-0.5 font-semibold">${l.chapter}</p>` : ''}
+          </div>
+          <div class="flex items-center gap-2 self-end sm:self-auto">
+            ${l.pdfUrl ? `<a href="${l.pdfUrl}" target="_blank" class="text-red-600 hover:underline text-[11px] font-bold">ملف PDF مرفق</a>` : ''}
+            <button onclick="removeLecture(${l.id})" class="px-3 py-1 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 font-bold text-[11px] transition-colors">
+              حذف
+            </button>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    /* ==========================================
+       إدارة مكتبة ملازم الـ PDF
+       ========================================== */
+    window.handleAddNewPdf = function(e) {
+      e.preventDefault();
+      const title = document.getElementById('pdfInputTitle').value.trim();
+      const subject = document.getElementById('pdfInputSubject').value.trim();
+      const grade = document.getElementById('pdfInputGrade').value;
+      const chapter = document.getElementById('pdfInputChapter').value.trim();
+      const fileUrl = document.getElementById('pdfInputFileUrl').value.trim();
+
+      const newPdf = {
+        id: Date.now(),
+        title,
+        subject,
+        grade,
+        chapter,
+        fileUrl
+      };
+
+      window.pdfDocs.unshift(newPdf);
+      triggerSave();
+      document.getElementById('addNewPdfForm').reset();
+      renderManagePdfsList();
+      renderStudentPdfs();
+    };
+
+    window.removePdf = function(id) {
+      window.pdfDocs = window.pdfDocs.filter(p => p.id !== id);
+      triggerSave();
+      renderManagePdfsList();
+      renderStudentPdfs();
+    };
+
+    window.renderManagePdfsList = function() {
+      const container = document.getElementById('managePdfsList');
+      if (!container) return;
+      if (window.pdfDocs.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 py-3 text-center font-bold">لا توجد ملفات في المكتبة حالياً.</p>`;
+        return;
+      }
+
+      container.innerHTML = window.pdfDocs.map(p => `
+        <div class="bg-slate-50 border border-slate-200/90 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="font-black text-slate-900">${p.title}</span>
+              <span class="bg-sky-100 text-sky-900 font-bold px-2 py-0.5 rounded text-[10px]">${p.grade}</span>
+              <span class="bg-slate-200 text-slate-800 font-bold px-2 py-0.5 rounded text-[10px]">${p.subject}</span>
+            </div>
+            ${p.chapter ? `<p class="text-slate-500 text-[11px] mt-0.5 font-semibold">${p.chapter}</p>` : ''}
+          </div>
+          <div class="flex items-center gap-2 self-end sm:self-auto">
+            <a href="${p.fileUrl}" target="_blank" class="px-2.5 py-1 rounded-lg bg-sky-50 text-sky-700 hover:bg-sky-100 font-bold text-[11px]">معاينة</a>
+            <button onclick="removePdf(${p.id})" class="px-3 py-1 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 font-bold text-[11px] transition-colors">حذف</button>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    /* ==========================================
+       تهيئة التطبيق عند بدء التشغيل
+       ========================================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      const datePicker = document.getElementById('attendanceDatePicker');
+      const singleReportDate = document.getElementById('reportSingleDate');
+      const reportFrom = document.getElementById('reportDateFrom');
+      const reportTo = document.getElementById('reportDateTo');
+
+      const today = getTodayDateString();
+      if (datePicker) datePicker.value = today;
+      if (singleReportDate) singleReportDate.value = today;
+      if (reportFrom) reportFrom.value = today;
+      if (reportTo) reportTo.value = today;
+
+      refreshUIVisibility();
+    });
+  </script>
+</body>
+</html>
